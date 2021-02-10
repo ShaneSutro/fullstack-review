@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher', {
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/fetcher', {
   useCreateIndex: true,
   autoIndex: true
 });
