@@ -20,7 +20,8 @@ class App extends React.Component {
       data: JSON.stringify({ term }),
       contentType: 'application/json',
       success: (err, data) => {
-        console.log(err, data)
+        console.log('err, data', err, data)
+        this.componentDidMount()
       }
     })
   }
@@ -31,6 +32,15 @@ class App extends React.Component {
       <RepoList repos={this.state.repos}/>
       <Search onSearch={this.search.bind(this)}/>
     </div>)
+  }
+
+  componentDidMount() {
+    $.ajax('http://localhost:1128/repos', {
+      method: 'GET',
+      success: (data) => {
+        this.setState({repos: JSON.parse(data)})
+      }
+    })
   }
 }
 

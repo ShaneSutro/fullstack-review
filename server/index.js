@@ -12,14 +12,20 @@ app.post('/repos', function (req, res) {
   github.getReposByUsername(req.body.term)
     .then(response => {
       db.save(response.data)
+      res.sendStatus(201)
     })
-    .catch(err => console.log('Error getting data from API:', err))
-  res.sendStatus(201)
+    .catch(err => {
+      console.log('Error getting data from API:', err)
+      res.sendStatus(400)
+    })
 });
 
 app.get('/repos', function (req, res) {
-  // TODO - your code here!
-  // This route should send back the top 25 repos
+  db.get()
+    .then(data => {
+      res.end(JSON.stringify(data))
+    })
+    .catch(err => res.sendStatus(400))
 });
 
 let port = 1128;
