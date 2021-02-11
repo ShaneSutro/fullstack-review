@@ -15,7 +15,6 @@ class App extends React.Component {
 
   search (term) {
     console.log(`${term} was searched`);
-    console.log(`Hitting endpoint http://localhost:${process.env.PORT}/repos`)
     $.ajax('/repos', {
       method: 'POST',
       data: JSON.stringify({ term }),
