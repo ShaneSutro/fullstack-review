@@ -48,10 +48,10 @@ let get = () => {
   return new Promise((resolve, reject) => {
     Repo.find(null, null, { limit: 25, sort: { avgScore: 'desc', name: 'asc' } }, (err, repos) => {
       if (err) {
-        console.log('err:' err)
+        console.log('err:', err)
         reject(err)
       } else {
-        console.log('success:' repos)
+        console.log('success:', repos)
         resolve(repos)
       }
     })
