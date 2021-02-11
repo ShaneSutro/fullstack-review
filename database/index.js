@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
 const mongoURI = process.env.MONGODB_URI
 mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
   useCreateIndex: true,
   autoIndex: true
 });
+
+mongoose.connection.on('error', (err) => { console.log(err) })
+mongoose.connection.on('open', () => { console.log('Connected!') })
+
 
 let repoSchema = mongoose.Schema({
   repo_id: {
