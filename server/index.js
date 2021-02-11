@@ -8,7 +8,6 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json())
 
 app.post('/repos', function (req, res) {
-  console.log('/repos post request received')
   github.getReposByUsername(req.body.term)
     .then(response => {
       db.save(response.data)
@@ -21,6 +20,7 @@ app.post('/repos', function (req, res) {
 });
 
 app.get('/repos', function (req, res) {
+  console.log('getting data from Mongoose...')
   db.get()
     .then(data => {
       res.end(JSON.stringify(data))

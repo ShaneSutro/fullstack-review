@@ -44,6 +44,7 @@ let save = (data) => {
 }
 
 let get = () => {
+  console.log('database file - pulling info from Atlas...')
   return new Promise((resolve, reject) => {
     Repo.find(null, null, { limit: 25, sort: { avgScore: 'desc', name: 'asc' } }, (err, repos) => {
       if (err) {
