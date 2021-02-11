@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 console.log(process.env.MONGODB_URI);
-var promise = mongoose.createConnection(process.env.MONGODB_URI)
-.then(db => console.log('connected!'))
-// mongoose.connect(process.env.MONGODB_URI, {
-//   useMongoClient: true,
-//   useCreateIndex: true,
-//   autoIndex: true
-// });
+mongoose.connect(process.env.MONGODB_URI, {
+  useMongoClient: true,
+  useCreateIndex: true,
+  autoIndex: true
+});
 
 let repoSchema = mongoose.Schema({
   repo_id: {
