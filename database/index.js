@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-console.log(process.env.MONGODB_URI);
-mongoose.connect('mongodb://admin:mAdhnLHEKo1fY7Dp@cluster0.vmuvb.mongodb.net/fetcher?retryWrites=true&w=majority', {
+const mongoURI = process.env.MONGODB_URI
+mongoose.connect(mongoURI, {
   useCreateIndex: true,
   autoIndex: true
 });
