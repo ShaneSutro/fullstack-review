@@ -16,7 +16,7 @@ class App extends React.Component {
   search (term) {
     console.log(`${term} was searched`);
     console.log(`Hitting endpoint http://localhost:${process.env.PORT}/repos`)
-    $.ajax(`http://localhost:${process.env.PORT}/repos`, {
+    $.ajax('/repos', {
       method: 'POST',
       data: JSON.stringify({ term }),
       contentType: 'application/json',
@@ -36,7 +36,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    $.ajax(`http://localhost:${process.env.PORT}/repos`, {
+    $.ajax('/repos', {
       method: 'GET',
       success: (data) => {
         this.setState({repos: JSON.parse(data)})
