@@ -6,7 +6,8 @@ const mongoURI = process.env.MONGODB_URI
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useCreateIndex: true,
-  autoIndex: true
+  autoIndex: true,
+  useUnifiedTopology: true
 });
 
 mongoose.connection.on('error', (err) => { console.log(err) })
@@ -33,6 +34,9 @@ let Repo = mongoose.model('Repo', repoSchema);
 
 let save = (data) => {
   Repo.init().then(() => {
+    Repo.find((err, repos) => {
+      initialCount = Object.keys(repos).length
+    })
     for (var i = 0; i < data.length; i++) {
       var repo = new Repo();
       repo.repo_id = data[i].id
@@ -45,20 +49,34 @@ let save = (data) => {
       repo.forks = data[i].forks_count;
       repo.avgScore = Math.floor((data[i].stargazers_count + data[i].watchers_count + data[i].forks) / 3)
       repo.save()
-      }
-    })
-    .catch(err => console.log(err))
+    }
+  })
+    .catch(err => { })
+}
+
+let createOrUpdate = async (data) => {
+  for (var i = 0; i < data.length; i++) {
+    var record = {}
+    // record.repo_id = data[i].id
+    record.id_user = data[i].owner.id;
+    record.by = data[i].owner.login;
+    record.name = data[i].name;
+    record.url = data[i].html_url;
+    record.stars = data[i].stargazers_count;
+    record.watchers = data[i].watchers_count;
+    record.forks = data[i].forks_count;
+    record.avgScore = Math.floor((data[i].stargazers_count + data[i].watchers_count + data[i].forks) / 3)
+    await Repo.findOneAndUpdate({ repo_id: data[i].id }, record, { new: true, upsert: true })
+  }
 }
 
 let get = () => {
   console.log('database file - pulling info from Atlas...')
   return new Promise((resolve, reject) => {
-    Repo.find(null, null, { limit: 25, sort: { avgScore: 'desc', name: 'asc' } }, (err, repos) => {
+    Repo.find((err, repos) => {
       if (err) {
-        console.log('err:', err);
         reject(err);
       } else {
-        console.log('success:', repos);
         resolve(repos);
       }
     })
@@ -67,3 +85,4 @@ let get = () => {
 
 module.exports.save = save;
 module.exports.get = get;
+module.exports.createOrUpdate = createOrUpdate;

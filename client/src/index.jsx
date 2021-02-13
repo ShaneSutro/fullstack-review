@@ -10,7 +10,6 @@ class App extends React.Component {
     this.state = {
       repos: []
     }
-
   }
 
   search (term) {
@@ -38,7 +37,17 @@ class App extends React.Component {
     $.ajax('/repos', {
       method: 'GET',
       success: (data) => {
-        this.setState({repos: JSON.parse(data)})
+        var repositories = JSON.parse(data)
+        var tempData = [];
+        for (var repo in repositories) {
+          tempData.push([repo, repositories[repo].avgScore])
+        }
+        tempData = tempData.sort((a, b) => b[1] - a[1])
+        var newState = []
+        for (var i = 0; i < tempData.length; i++) {
+          newState.push(repositories[tempData[i][0]])
+        }
+        this.setState({repos: newState})
       }
     })
   }
