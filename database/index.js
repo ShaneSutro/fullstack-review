@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+print('Environment:', process.env.NODE_ENV)
+if (process.env.NODE_ENV === 'production') { require('dotenv').config() }
 const mongoURI = process.env.MONGODB_URI
 
 mongoose.connect(mongoURI, {
@@ -9,7 +11,6 @@ mongoose.connect(mongoURI, {
 
 mongoose.connection.on('error', (err) => { console.log(err) })
 mongoose.connection.on('open', () => { console.log('Connected!') })
-if (process.env.NODE_ENV === 'production') { require('dotenv').config() }
 
 
 let repoSchema = mongoose.Schema({
