@@ -1,6 +1,6 @@
 const axios = require('axios');
 // const config = require('../config.js');
-if (process.env.NODE_ENV === 'production') { require('dotenv').config() }
+if (process.env.NODE_ENV !== 'production') { require('dotenv').config() }
 
 let getReposByUsername = (username) => {
   // TODO - Use the axios module to request repos for a specific

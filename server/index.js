@@ -3,7 +3,7 @@ let app = express();
 let bodyParser = require('body-parser')
 let github = require('../helpers/github')
 let db = require('../database/index')
-if (process.env.NODE_ENV === 'production') { require('dotenv').config() }
+if (process.env.NODE_ENV !== 'production') { require('dotenv').config() }
 
 app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json())
