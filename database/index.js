@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const mongoURI = process.env.MONGODB_URI
-console.log('type:', typeof mongoURI)
+
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -9,12 +9,14 @@ mongoose.connect(mongoURI, {
 
 mongoose.connection.on('error', (err) => { console.log(err) })
 mongoose.connection.on('open', () => { console.log('Connected!') })
+require('dotenv').config();
 
 
 let repoSchema = mongoose.Schema({
   repo_id: {
     type: Number,
-    unique: true
+    unique: true,
+    dropDups: true
   },
   id_user: Number,
   by: String,
@@ -29,19 +31,22 @@ let repoSchema = mongoose.Schema({
 let Repo = mongoose.model('Repo', repoSchema);
 
 let save = (data) => {
-  for (var i = 0; i < data.length; i++) {
-    var repo = new Repo()
-    repo.repo_id = data[i].id
-    repo.id_user = data[i].owner.id;
-    repo.by = data[i].owner.login;
-    repo.name = data[i].name;
-    repo.url = data[i].html_url;
-    repo.stars = data[i].stargazers_count;
-    repo.watchers = data[i].watchers_count;
-    repo.forks = data[i].forks_count;
-    repo.avgScore = Math.floor((data[i].stargazers_count + data[i].watchers_count + data[i].forks) / 3)
-    repo.save()
-  }
+  Repo.init().then(() => {
+    for (var i = 0; i < data.length; i++) {
+      var repo = new Repo();
+      repo.repo_id = data[i].id
+      repo.id_user = data[i].owner.id;
+      repo.by = data[i].owner.login;
+      repo.name = data[i].name;
+      repo.url = data[i].html_url;
+      repo.stars = data[i].stargazers_count;
+      repo.watchers = data[i].watchers_count;
+      repo.forks = data[i].forks_count;
+      repo.avgScore = Math.floor((data[i].stargazers_count + data[i].watchers_count + data[i].forks) / 3)
+      repo.save()
+      }
+    })
+    .catch(err => console.log(err))
 }
 
 let get = () => {
