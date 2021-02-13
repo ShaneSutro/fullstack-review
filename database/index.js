@@ -9,7 +9,7 @@ mongoose.connect(mongoURI, {
 
 mongoose.connection.on('error', (err) => { console.log(err) })
 mongoose.connection.on('open', () => { console.log('Connected!') })
-require('dotenv').config();
+if (process.env.NODE_ENV === 'production') { require('dotenv').config() }
 
 
 let repoSchema = mongoose.Schema({
